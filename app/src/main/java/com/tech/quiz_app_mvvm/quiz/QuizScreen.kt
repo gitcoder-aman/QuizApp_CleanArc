@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -16,11 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
+import androidx.navigation.NavController
 import com.tech.quiz_app_mvvm.R
+import com.tech.quiz_app_mvvm.presentation.common.ButtonBox
 import com.tech.quiz_app_mvvm.presentation.common.QuizAppBar
+import com.tech.quiz_app_mvvm.quiz.component.QuizInterface
 import com.tech.quiz_app_mvvm.utils.Constants
 import com.tech.quiz_app_mvvm.utils.Dimens
 
@@ -31,7 +35,8 @@ fun QuizScreen(
     quizDifficulty: String,
     quizType: String,
     event: (EventQuizScreen) -> Unit,
-    state: StateQuizScreen
+    state: StateQuizScreen,
+    navController: NavController
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -57,7 +62,7 @@ fun QuizScreen(
             )
         }
         QuizAppBar(quizCategory = quizCategory) {
-
+            navController.navigateUp()
         }
         Column(
             modifier = Modifier
@@ -84,15 +89,52 @@ fun QuizScreen(
             Spacer(modifier = Modifier.height(Dimens.LargeSpacerHeight))
 
             //Quiz Interface
+            QuizInterface(modifier = Modifier.weight(1f), onOptionSelected = {}, qNumber = 1)
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = Dimens.MediumPadding)
+                    .navigationBarsPadding()
+            ) {
+                ButtonBox(
+                    text = "Previous",
+                    padding = Dimens.SmallPadding,
+                    fraction = 0.43f,
+                    fontSize = Dimens.SmallTextSize
+                ) {
+
+                }
+                ButtonBox(
+                    text = "Next",
+                    borderColor = colorResource(id = R.color.orange),
+                    containerColor = colorResource(id = R.color.dark_slate_blue),
+                    padding = Dimens.SmallPadding,
+                    fraction = 1f,
+                    fontSize = Dimens.SmallTextSize,
+                    textColor = colorResource(id = R.color.white)
+                ) {
+
+                }
+            }
         }
     }
 
 }
 
-//@Preview
-//@Composable
-//fun QuizScreenPreview() {
-//    QuizScreen(numOfQuiz = 10 , quizCategory = "Science", quizDifficulty = "Hard")
-//}
+@Preview
+@Composable
+fun QuizScreenPreview() {
+    QuizScreen(
+        numOfQuiz = 10,
+        quizCategory = "Science",
+        quizDifficulty = "Hard",
+        quizType = "Easy",
+        event = {},
+        state = StateQuizScreen(),
+        navController = NavController(
+            LocalContext.current
+        )
+    )
+}
 

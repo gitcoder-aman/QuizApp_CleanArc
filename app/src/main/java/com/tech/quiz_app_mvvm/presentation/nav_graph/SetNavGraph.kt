@@ -50,7 +50,8 @@ fun SetNavGraph() {
                 quizDifficulty = difficulty!!,
                 quizType = type!!,
                 event = quizViewModel::onEvent ,
-                state = state
+                state = state,
+                navController = navController
             )
         }
     }
