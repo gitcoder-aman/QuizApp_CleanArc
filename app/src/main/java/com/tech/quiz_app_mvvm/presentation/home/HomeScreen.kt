@@ -21,20 +21,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.tech.quiz_app_mvvm.R
 import com.tech.quiz_app_mvvm.presentation.common.AppDropDownMenu
 import com.tech.quiz_app_mvvm.presentation.common.ButtonBox
+import com.tech.quiz_app_mvvm.presentation.nav_graph.Routes
 import com.tech.quiz_app_mvvm.utils.Constants
 import com.tech.quiz_app_mvvm.utils.Dimens
 
 @Composable
 fun HomeScreen(
     state: StateHomeScreen,
-    event: (EventHomeScreen) -> Unit
+    event: (EventHomeScreen) -> Unit,
+    navController: NavController
 ) {
 
     Column(
@@ -83,9 +87,13 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(Dimens.MediumSpacerHeight))
 
         ButtonBox(text = "Generate Quiz", padding = Dimens.MediumPadding) {
-            Log.d(
-                "quiz_detail",
-                "HomeScreen: ${state.numberOfQuiz} ${state.category} ${state.difficulty} ${state.type}"
+            navController.navigate(
+                route = Routes.QuizScreen.passQuizParams(
+                    numOfQuizzes = state.numberOfQuiz,
+                    category = state.category,
+                    difficulty = state.difficulty,
+                    type = state.type
+                )
             )
         }
 
@@ -148,5 +156,9 @@ fun HomeHeader() {
 @Preview
 @Composable
 fun PreviewHome() {
-    HomeScreen(state = StateHomeScreen(), event = {})
+    HomeScreen(
+        state = StateHomeScreen(),
+        event = {},
+        navController = NavController(LocalContext.current)
+    )
 }

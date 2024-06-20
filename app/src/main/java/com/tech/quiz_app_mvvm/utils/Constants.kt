@@ -2,6 +2,7 @@ package com.tech.quiz_app_mvvm.utils
 
 object Constants {
 
+    val BASE_URL = "https://opentdb.com/"
     val numbersAsString = listOf("10") + (1..50).map { it.toString() }
     val category = listOf(
 
@@ -57,6 +58,6 @@ object Constants {
         "Entertainment: Cartoon & Animations" to 32
     )
     val difficulty = listOf("Easy","Medium","Hard")
-    val type = listOf("Multiple Choice","True/False")
+    val type = listOf("Multiple Choice","TrueORFalse")
 
 }

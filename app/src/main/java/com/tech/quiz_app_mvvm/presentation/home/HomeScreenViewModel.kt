@@ -1,4 +1,4 @@
-package com.tech.quiz_app_mvvm.viewmodel
+package com.tech.quiz_app_mvvm.presentation.home
 
 import androidx.lifecycle.ViewModel
 import com.tech.quiz_app_mvvm.presentation.home.EventHomeScreen

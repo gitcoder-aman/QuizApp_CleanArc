@@ -80,10 +80,13 @@ dependencies {
     //Dagger hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+//    implementation(libs.dagger)
+//    annotationProcessor(libs.dagger.compiler)
 
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.common)
 
     //retrofit
     implementation(libs.retrofit)
@@ -93,4 +96,7 @@ dependencies {
     implementation(libs.lottie.compose)
 
 
+}
+kapt {
+    correctErrorTypes ; true
 }

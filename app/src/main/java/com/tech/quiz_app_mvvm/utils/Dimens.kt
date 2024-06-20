@@ -6,6 +6,9 @@ import androidx.compose.ui.unit.sp
 
 object Dimens {
 
+    val MediumCornerRadius = 30.dp
+    val VerySmallPadding = 2.dp
+    val LargeSpacerHeight = 30.dp
     val MediumTextSize = 26.sp
     val LargeTextSize = 40.sp
 
