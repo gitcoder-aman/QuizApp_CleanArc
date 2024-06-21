@@ -1,11 +1,5 @@
 package com.tech.quiz_app_mvvm.quiz.component
 
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.DefaultMarqueeDelayMillis
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -24,14 +17,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tech.quiz_app_mvvm.R
+import com.tech.quiz_app_mvvm.quiz.QuizState
 import com.tech.quiz_app_mvvm.utils.Dimens
 
 @Composable
 fun QuizInterface(
     onOptionSelected: (Int) -> Unit,
     qNumber: Int,
+    quizState: QuizState,
     modifier: Modifier = Modifier
 ) {
+    val question = quizState.quiz?.question!!.replace("&quot", "\"").replace("&#039;", "\"")
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier.wrapContentHeight()
@@ -47,7 +43,7 @@ fun QuizInterface(
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Which cartoon do you see?",
+                    text = question,
                     color = colorResource(id = R.color.blue_grey),
                     modifier = Modifier.weight(9f),
                     fontSize = Dimens.SmallTextSize,
@@ -59,19 +55,34 @@ fun QuizInterface(
             Column(
                 modifier = Modifier.padding(horizontal = 15.dp)
             ) {
-                val options = listOf(
-                    "A" to "Doramon",
-                    "B" to "Oggy",
-                    "C" to "Ben 10",
-                    "D" to "Tom and Jerry"
-                )
+                var options: List<Pair<String, String>> = emptyList()
+                if (quizState.quiz.type == "multiple") {
+                    options = listOf(
+                        "A" to quizState.shuffleOptions[0].replace("&quot", "\"")
+                            .replace("&#039;", "\""),
+                        "B" to quizState.shuffleOptions[1].replace("&quot", "\"")
+                            .replace("&#039;", "\""),
+                        "C" to quizState.shuffleOptions[2].replace("&quot", "\"")
+                            .replace("&#039;", "\""),
+                        "D" to quizState.shuffleOptions[3].replace("&quot", "\"")
+                            .replace("&#039;", "\"")
+                    )
+                } else {
+                    options = listOf(
+                        "A" to quizState.shuffleOptions[0].replace("&quot", "\"")
+                            .replace("&#039;", "\""),
+
+                        "B" to quizState.shuffleOptions[1].replace("&quot", "\"")
+                            .replace("&#039;", "\""),
+                    )
+                }
                 Column {
                     options.forEachIndexed { index, (optionNumber: String, optionText: String) ->
                         if (optionText.isNotEmpty()) {
                             QuizOption(
                                 optionNumber = optionNumber,
                                 options = optionText,
-                                selected = false,
+                                selected = quizState.selectedOptions == index,
                                 onOptionClick = { onOptionSelected(index) },
                                 onUnselectOption = { onOptionSelected(-1) }
                             )
@@ -89,5 +100,5 @@ fun QuizInterface(
 @Preview
 @Composable
 fun QuizInterfacePreview() {
-    QuizInterface(onOptionSelected = {}, qNumber = 1)
+    QuizInterface(onOptionSelected = {}, quizState = QuizState(), qNumber = 1)
 }

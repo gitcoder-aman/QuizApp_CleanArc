@@ -124,7 +124,7 @@ fun QuizOption(
                 text = options,
                 modifier = Modifier.weight(7.1f),
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 maxLines = 3,
                 color = optionTextColor
             )

@@ -1,6 +1,5 @@
 package com.tech.quiz_app_mvvm.presentation.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

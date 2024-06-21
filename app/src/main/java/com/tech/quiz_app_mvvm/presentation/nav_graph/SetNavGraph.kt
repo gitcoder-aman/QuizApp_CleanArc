@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.tech.quiz_app_mvvm.presentation.home.HomeScreen
 import com.tech.quiz_app_mvvm.quiz.QuizScreen
 import com.tech.quiz_app_mvvm.presentation.home.HomeScreenViewModel
+import com.tech.quiz_app_mvvm.presentation.score.ScoreScreen
 import com.tech.quiz_app_mvvm.quiz.QuizViewModel
 
 @Composable
@@ -49,10 +50,21 @@ fun SetNavGraph() {
                 quizCategory = category!!,
                 quizDifficulty = difficulty!!,
                 quizType = type!!,
-                event = quizViewModel::onEvent ,
+                event = quizViewModel::onEvent,
                 state = state,
                 navController = navController
             )
+        }
+        composable(
+            route = Routes.ScoreScreen.route,
+            arguments = listOf(
+                navArgument(NOQ_KEY) { type = NavType.IntType },
+                navArgument(CORRECT_ANS_KEY) { type = NavType.IntType }
+            )
+        ) {
+            val numOfQuestions = it.arguments?.getInt(NOQ_KEY)
+            val numOfCorrectAns = it.arguments?.getInt(CORRECT_ANS_KEY)
+            ScoreScreen(numOfQuestions = numOfQuestions!!, numOfCorrectAns = numOfCorrectAns!!,navController)
         }
     }
 }
