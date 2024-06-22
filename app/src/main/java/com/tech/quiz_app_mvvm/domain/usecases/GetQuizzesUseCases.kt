@@ -1,6 +1,7 @@
 package com.tech.quiz_app_mvvm.domain.usecases
 
 import com.tech.quiz_app_mvvm.common.Resource
+import com.tech.quiz_app_mvvm.data.remote.dto.QuizResponse
 import com.tech.quiz_app_mvvm.domain.model.Quiz
 import com.tech.quiz_app_mvvm.domain.repository.QuizRepository
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +17,7 @@ class GetQuizzesUseCases(
         category : Int,
         difficulty : String,
         type: String
-    ): Flow<Resource<List<Quiz>>> = flow{
+    ): Flow<Resource<QuizResponse>> = flow{
 
         emit(Resource.Loading())
 

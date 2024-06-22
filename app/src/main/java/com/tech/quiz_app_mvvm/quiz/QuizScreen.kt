@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,12 +26,20 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.tech.quiz_app_mvvm.R
 import com.tech.quiz_app_mvvm.presentation.common.ButtonBox
 import com.tech.quiz_app_mvvm.presentation.common.QuizAppBar
@@ -58,7 +68,7 @@ fun QuizScreen(
     ) {
 
         BackHandler {
-            goToHome(navController)
+            navController.navigateUp()
         }
         LaunchedEffect(key1 = Unit) {
             val difficulty = when (quizDifficulty) {
@@ -80,7 +90,7 @@ fun QuizScreen(
             )
         }
         QuizAppBar(quizCategory = quizCategory) {
-            goToHome(navController)
+            navController.navigateUp()
         }
         Column {
             if (!state.isLoading) {
@@ -232,8 +242,38 @@ fun quizFetched(state: StateQuizScreen, quizType: String): Boolean {
         }
 
         else -> {
-            Text(text = state.error, color = colorResource(id = R.color.white))
+            ErrorComposableScreen(state.error)
             false
+        }
+    }
+}
+
+@Composable
+fun ErrorComposableScreen(error: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.wrapContentHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.no_data_found))
+
+            LottieAnimation(
+                composition = composition,
+                modifier = Modifier.size(Dimens.NoDataFoundLottieAnimationSize),
+                iterations = 100
+            )
+            Spacer(modifier = Modifier.height(Dimens.SmallSpacerHeight))
+
+            Text(text = error, style = TextStyle(
+                color = colorResource(id = R.color.white),
+                fontSize = Dimens.SmallTextSize,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            ))
         }
     }
 }
@@ -252,5 +292,10 @@ fun QuizScreenPreview() {
             LocalContext.current
         )
     )
+}
+@Preview
+@Composable
+fun ErrorComposableScreenPreview() {
+    ErrorComposableScreen(error = "Something went wrong!")
 }
 

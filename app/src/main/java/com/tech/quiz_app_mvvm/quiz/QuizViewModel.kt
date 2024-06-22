@@ -72,7 +72,7 @@ class QuizViewModel @Inject constructor(
                 _quizList.value = quizList.value.copy(
                     score = previousScore + 1
                 )
-            }else if(quizState.selectedOptions == -1){//when correct ans not matched
+            }else if(quizState.selectedOptions?.equals(-1) == true){//when correct ans not matched
                 val previousScore = _quizList.value.score
                 _quizList.value = quizList.value.copy(
                     score = previousScore - 1
@@ -93,12 +93,14 @@ class QuizViewModel @Inject constructor(
                     is Resource.Loading -> {
                         _quizList.value = StateQuizScreen(isLoading = true)
                     }
-
                     is Resource.Success -> {
-                        val listOfQuizState: List<QuizState> = getListOfQuizState(resource.data)
-                        _quizList.value = StateQuizScreen(quizState = listOfQuizState)
+                        if(resource.data?.response_code == 0){
+                            val listOfQuizState: List<QuizState> = getListOfQuizState(resource.data.results)
+                            _quizList.value = StateQuizScreen(quizState = listOfQuizState)
+                        }else{
+                            _quizList.value = StateQuizScreen(error = "No Data Found,Please No of Questions taking less.")
+                        }
                     }
-
                     is Resource.Error -> {
                         _quizList.value = StateQuizScreen(error = resource.message.toString())
                     }

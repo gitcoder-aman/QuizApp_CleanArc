@@ -35,5 +35,6 @@ object Dimens {
     val RoundedCornerShape = 15.dp
 
     val LargeLottieAnimation = 150.dp
+    val NoDataFoundLottieAnimationSize = 350.dp
 
 }
