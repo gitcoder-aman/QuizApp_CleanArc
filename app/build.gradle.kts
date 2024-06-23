@@ -94,6 +94,15 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.lottie.compose)
 
+    //room dependencies
+    implementation(libs.androidx.room.runtime)
+
+    // For Kotlin projects use kapt instead of annotationProcessor
+    kapt(libs.room.compiler)
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation(libs.androidx.room.ktx)
+
 
 }
 kapt {
