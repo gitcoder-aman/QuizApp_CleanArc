@@ -160,17 +160,6 @@ fun QuizOption(
     }
 }
 
-fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    this.clickable(
-        indication = null,
-        interactionSource = remember {
-            MutableInteractionSource()
-        }
-    ) {
-        onClick()
-    }
-}
-
 @Preview
 @Composable
 fun QuizOptionPreview() {

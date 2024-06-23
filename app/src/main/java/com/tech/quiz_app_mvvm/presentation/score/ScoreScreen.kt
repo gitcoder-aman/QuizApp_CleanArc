@@ -169,8 +169,8 @@ fun ScoreScreen(
                     Spacer(modifier = Modifier.width(Dimens.SmallSpacerWidth))
 
                     Icon(
-                        painter = painterResource(id = R.drawable.whatsapp),
-                        contentDescription = "whatsapp",
+                        painter = painterResource(id = R.drawable.linkedin),
+                        contentDescription = "Linkedin",
                         modifier = Modifier.size(40.dp)
                     )
 
