@@ -2,4 +2,5 @@
     <string name="app_name">Quiz Me</string>
     <string name="quiz_description">A quiz app is a digital platform that allows users to take online quizzes and tests. It is a collection of questions and answers that can be accessed and completed by users on their mobile devices or computers. Quiz apps can be used for various purposes, such as:</string>
     <string name="your_scores">Your Scores</string>
+    <string name="please_play_the_quiz">Please play the quiz.</string>
 </resources>

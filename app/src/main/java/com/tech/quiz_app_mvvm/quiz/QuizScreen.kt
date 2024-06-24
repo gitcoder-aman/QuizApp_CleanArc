@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -207,6 +208,7 @@ fun QuizScreen(
                                 "@@score",
                                 "QuizScreen: ${state.rightAnswer}"
                             )
+
                             navController.navigate(
                                 Routes.ScoreScreen.passNumOfQuestionsAndCorrectAns(
                                     numOfQuestion = state.quizState.size,
@@ -265,6 +267,7 @@ fun QuizScreenPreview() {
         )
     )
 }
+
 @Preview
 @Composable
 fun ErrorComposableScreenPreview() {

@@ -10,7 +10,7 @@ sealed class EventQuizScreen {
 
     data class SetOptionSelected(
         val quizStateIndex : Int,
-        val selectedOption : Int
+        val selectedOption : Int,
     ) : EventQuizScreen()
 }
 

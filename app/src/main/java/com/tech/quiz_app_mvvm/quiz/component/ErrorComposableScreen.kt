@@ -43,12 +43,13 @@ fun ErrorComposableScreen(error: String) {
             )
             Spacer(modifier = Modifier.height(Dimens.SmallSpacerHeight))
 
-            Text(text = error, style = TextStyle(
-                color = colorResource(id = R.color.white),
-                fontSize = Dimens.SmallTextSize,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+            Text(
+                text = error, style = TextStyle(
+                    color = colorResource(id = R.color.white),
+                    fontSize = Dimens.SmallTextSize,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
             )
         }
     }

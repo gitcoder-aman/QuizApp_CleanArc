@@ -41,7 +41,7 @@ fun SetNavGraph() {
             val quizRoomViewModel: QuizRoomViewModel = hiltViewModel()
             val recordState by quizRoomViewModel.allQuizRecords.observeAsState(QuizSaveRecordState.Loading)
 
-            ScoreDetailScreen(navController,recordState)
+            ScoreDetailScreen(navController, recordState)
         }
         composable(
             route = Routes.QuizScreen.route, arguments = listOf(
@@ -55,9 +55,6 @@ fun SetNavGraph() {
             val category = it.arguments?.getString(ARG_KEY_QUIZ_CATEGORY)
             val difficulty = it.arguments?.getString(ARG_KEY_QUIZ_DIFFICULTY)
             val type = it.arguments?.getString(ARG_KEY_QUIZ_TYPE)
-
-//            val quizViewModel: QuizViewModel = hiltViewModel()
-//            val state by quizViewModel.quizList.collectAsState()
 
             QuizScreen(
                 numOfQuiz = numOfQuizzes!!,
@@ -74,7 +71,7 @@ fun SetNavGraph() {
             arguments = listOf(
                 navArgument(NOQ_KEY) { type = NavType.IntType },
                 navArgument(CORRECT_ANS_KEY) { type = NavType.IntType },
-                navArgument(WRONG_ANS_KEY){type = NavType.IntType}
+                navArgument(WRONG_ANS_KEY) { type = NavType.IntType }
             )
         ) {
             val numOfQuestions = it.arguments?.getInt(NOQ_KEY)

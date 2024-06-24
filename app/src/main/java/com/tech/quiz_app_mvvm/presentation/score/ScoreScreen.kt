@@ -222,9 +222,6 @@ fun SaveQuizRecordInLocalDatabase(
     onInserted :()->Unit
 ) {
     val quizRoomViewModel: QuizRoomViewModel = hiltViewModel()
-//    val quizRoomViewModel: QuizRoomViewModel = viewModel()
-//
-//    val quizzes by quizRoomViewModel..observeAsState(initial = emptyList())
 
     LaunchedEffect(key1 = Unit) {
 

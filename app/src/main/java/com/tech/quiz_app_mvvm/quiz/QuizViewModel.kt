@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
@@ -19,6 +18,9 @@ class QuizViewModel @Inject constructor(
 
     private val _quizList = MutableStateFlow(StateQuizScreen())
     val quizList = _quizList
+
+    private var oldQuizIndex = -1
+
     fun onEvent(event: EventQuizScreen) {
         when (event) {
             is EventQuizScreen.GetQuizzes -> {
@@ -36,6 +38,27 @@ class QuizViewModel @Inject constructor(
         }
     }
 
+    private fun updateWrongScore() {
+        val unselectedQuestion = findUnSelectedQuestion(_quizList.value)
+        val wrongAnswer =
+            _quizList.value.quizState.size - (unselectedQuestion + _quizList.value.rightAnswer)
+        _quizList.value = _quizList.value.copy(
+            wrongAnswer = wrongAnswer
+        )
+    }
+    private fun findUnSelectedQuestion(state: StateQuizScreen): Int {
+
+        var unSelectedQuestion = 0
+
+        for (i in state.quizState) {
+            if (i.selectedOptions == -1) {
+                unSelectedQuestion += 1
+            }
+        }
+        return unSelectedQuestion
+    }
+
+
     //contain the selected options
     private fun updateQuizStateList(quizStateIndex: Int, selectedOption: Int) {
 
@@ -52,10 +75,13 @@ class QuizViewModel @Inject constructor(
         _quizList.value = _quizList.value.copy(quizState = updatedQuizStateList)
 
         //updateScore
-        updateScore(_quizList.value.quizState[quizStateIndex])
+        updateCorrectScore(_quizList.value.quizState[quizStateIndex], quizStateIndex)
+        updateWrongScore()
     }
 
-    private fun updateScore(quizState: QuizState) {
+
+
+    private fun updateCorrectScore(quizState: QuizState, quizStateIndex: Int) {
 
         if (quizState.selectedOptions != -1) {
             val correctAnswer = quizState.quiz?.correct_answer
@@ -64,33 +90,27 @@ class QuizViewModel @Inject constructor(
                     .replace("&#039;", "\"")
             }
             Log.d(
-                "@@score",
+                "@@scoreViewModel",
                 "SelectedAnswer: $selectedAnswer"
             )
-            if (correctAnswer == selectedAnswer) {
-                val previousRightAnswer = _quizList.value.rightAnswer
-                _quizList.value = quizList.value.copy(
-                    rightAnswer = previousRightAnswer + 1
-                )
-            } else {
-                Log.d("@@score_wrong", "updateScore: ${_quizList.value.wrongAnswer}")
-                val previousWrongAnswer = _quizList.value.wrongAnswer
-                _quizList.value = quizList.value.copy(
-                    wrongAnswer = previousWrongAnswer + 1)
-                Log.d("@@score_wrong", "updateScore: ${_quizList.value.wrongAnswer}")
 
+            if (oldQuizIndex != quizStateIndex) {
+                if (correctAnswer == selectedAnswer) {
+                    oldQuizIndex = quizStateIndex
+                    val previousRightAnswer = _quizList.value.rightAnswer
+                    _quizList.value = quizList.value.copy(
+                        rightAnswer = previousRightAnswer + 1
+                    )
+                }
+            } else {
+                if (correctAnswer != selectedAnswer) {
+                    val previousRightAnswer = _quizList.value.rightAnswer
+                    _quizList.value = quizList.value.copy(
+                        rightAnswer = previousRightAnswer - 1
+                    )
+                    oldQuizIndex = -1
+                }
             }
-//            else if(quizState.selectedOptions?.equals(-1) == true){//when correct ans not matched
-//                val previousRightAnswer = _quizList.value.rightAnswer
-//                _quizList.value = quizList.value.copy(
-//                    rightAnswer = previousRightAnswer - 1
-//                )
-//            }else if(correctAnswer != selectedAnswer){
-//                val previousWrongAnswer = _quizList.value.wrongAnswer
-//                _quizList.value = quizList.value.copy(
-//                    wrongAnswer = previousWrongAnswer + 1
-//                )
-//            }
         }
     }
 

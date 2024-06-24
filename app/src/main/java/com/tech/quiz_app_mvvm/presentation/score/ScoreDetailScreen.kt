@@ -112,7 +112,11 @@ fun ScoreDetailContent(recordState: QuizSaveRecordState) {
                         topEnd = Dimens.ExtraLargeCornerRadius
                     )
                 )
-                .padding(top = Dimens.SmallPadding,start = Dimens.SmallPadding,end = Dimens.SmallPadding)
+                .padding(
+                    top = Dimens.SmallPadding,
+                    start = Dimens.SmallPadding,
+                    end = Dimens.SmallPadding
+                )
                 .fillMaxSize()
         ) {
             Spacer(modifier = Modifier.height(Dimens.SmallSpacerHeight))
@@ -124,29 +128,33 @@ fun ScoreDetailContent(recordState: QuizSaveRecordState) {
 
                 is QuizSaveRecordState.Success -> {
                     val listQuizRecords = (recordState as QuizSaveRecordState.Success).data
-                    LazyColumn {
-                        items(listQuizRecords) { quizRecord ->
+                    if(listQuizRecords.isNotEmpty()) {
+                        LazyColumn {
+                            items(listQuizRecords) { quizRecord ->
 
-                            val listOfLightColor = listOf(
-                                LightOrangeColor, LightSkyColor, LightVioletColor
-                            ).random()
+                                val listOfLightColor = listOf(
+                                    LightOrangeColor, LightSkyColor, LightVioletColor
+                                ).random()
 
-                            val listOfColor = mapOf(
-                                LightOrangeColor to OrangeColor,
-                                LightSkyColor to SkyColor,
-                                LightVioletColor to VioletColor
-                            )
-                            ScoreInterface(
-                                countNumber = quizRecord.id.toString(),
-                                category = quizRecord.state.quizState[0].quiz?.category!!,
-                                totalRightAnswer = quizRecord.numOfRightAnswer.toString(),
-                                totalWrongAnswer = quizRecord.numOfWrongAnswer.toString(),
-                                nonAttemptedQuestion = quizRecord.unattemptedQuestion.toString(),
-                                timeDuration = "30s",
-                                backgroundColor = listOfLightColor,
-                                iconColor = listOfColor[listOfLightColor]!!
-                            )
+                                val listOfColor = mapOf(
+                                    LightOrangeColor to OrangeColor,
+                                    LightSkyColor to SkyColor,
+                                    LightVioletColor to VioletColor
+                                )
+                                ScoreInterface(
+                                    countNumber = quizRecord.id.toString(),
+                                    category = quizRecord.state.quizState[0].quiz?.category!!,
+                                    totalRightAnswer = quizRecord.numOfRightAnswer.toString(),
+                                    totalWrongAnswer = quizRecord.numOfWrongAnswer.toString(),
+                                    nonAttemptedQuestion = quizRecord.unattemptedQuestion.toString(),
+                                    timeDuration = "30s",
+                                    backgroundColor = listOfLightColor,
+                                    iconColor = listOfColor[listOfLightColor]!!
+                                )
+                            }
                         }
+                    }else{
+                        ErrorComposableScreen(error = stringResource(R.string.please_play_the_quiz))
                     }
                 }
 
