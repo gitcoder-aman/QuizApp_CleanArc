@@ -6,7 +6,8 @@ data class StateQuizScreen(
     val isLoading : Boolean = false,
     val quizState : List<QuizState> = listOf(),
     val error : String = "",
-    val score : Int = 0
+    val rightAnswer : Int = 0,
+    val wrongAnswer : Int = 0
 )
 data class QuizState(
     val quiz: Quiz ?= null,

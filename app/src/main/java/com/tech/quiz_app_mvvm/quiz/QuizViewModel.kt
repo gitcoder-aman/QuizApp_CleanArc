@@ -68,16 +68,29 @@ class QuizViewModel @Inject constructor(
                 "SelectedAnswer: $selectedAnswer"
             )
             if (correctAnswer == selectedAnswer) {
-                val previousScore = _quizList.value.score
+                val previousRightAnswer = _quizList.value.rightAnswer
                 _quizList.value = quizList.value.copy(
-                    score = previousScore + 1
+                    rightAnswer = previousRightAnswer + 1
                 )
-            }else if(quizState.selectedOptions?.equals(-1) == true){//when correct ans not matched
-                val previousScore = _quizList.value.score
+            } else {
+                Log.d("@@score_wrong", "updateScore: ${_quizList.value.wrongAnswer}")
+                val previousWrongAnswer = _quizList.value.wrongAnswer
                 _quizList.value = quizList.value.copy(
-                    score = previousScore - 1
-                )
+                    wrongAnswer = previousWrongAnswer + 1)
+                Log.d("@@score_wrong", "updateScore: ${_quizList.value.wrongAnswer}")
+
             }
+//            else if(quizState.selectedOptions?.equals(-1) == true){//when correct ans not matched
+//                val previousRightAnswer = _quizList.value.rightAnswer
+//                _quizList.value = quizList.value.copy(
+//                    rightAnswer = previousRightAnswer - 1
+//                )
+//            }else if(correctAnswer != selectedAnswer){
+//                val previousWrongAnswer = _quizList.value.wrongAnswer
+//                _quizList.value = quizList.value.copy(
+//                    wrongAnswer = previousWrongAnswer + 1
+//                )
+//            }
         }
     }
 
@@ -93,14 +106,18 @@ class QuizViewModel @Inject constructor(
                     is Resource.Loading -> {
                         _quizList.value = StateQuizScreen(isLoading = true)
                     }
+
                     is Resource.Success -> {
-                        if(resource.data?.response_code == 0){
-                            val listOfQuizState: List<QuizState> = getListOfQuizState(resource.data.results)
+                        if (resource.data?.response_code == 0) {
+                            val listOfQuizState: List<QuizState> =
+                                getListOfQuizState(resource.data.results)
                             _quizList.value = StateQuizScreen(quizState = listOfQuizState)
-                        }else{
-                            _quizList.value = StateQuizScreen(error = "No Data Found,Please No of Questions taking less.")
+                        } else {
+                            _quizList.value =
+                                StateQuizScreen(error = "No Data Found,Please No of Questions taking less.")
                         }
                     }
+
                     is Resource.Error -> {
                         _quizList.value = StateQuizScreen(error = resource.message.toString())
                     }

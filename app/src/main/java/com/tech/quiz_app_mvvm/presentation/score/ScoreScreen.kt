@@ -21,7 +21,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,14 +39,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.tech.quiz_app_mvvm.R
-import com.tech.quiz_app_mvvm.presentation.nav_graph.Routes
 import com.tech.quiz_app_mvvm.presentation.nav_graph.goToHome
+import com.tech.quiz_app_mvvm.quiz.StateQuizScreen
+import com.tech.quiz_app_mvvm.room_db.domain.model.QuizEntity
+import com.tech.quiz_app_mvvm.room_db.presentation.QuizRoomViewModel
 import com.tech.quiz_app_mvvm.utils.Dimens
 import java.text.DecimalFormat
 
@@ -51,8 +56,29 @@ import java.text.DecimalFormat
 fun ScoreScreen(
     numOfQuestions: Int,
     numOfCorrectAns: Int,
+    numOfWrongAns: Int,
+    state: StateQuizScreen,
     navController: NavController
 ) {
+
+    val scorePercentage = calculatePercentage(numOfCorrectAns, numOfQuestions)
+
+    // State variable to control database insertion
+    val isInserted = remember { mutableStateOf(false) }
+
+    if(!isInserted.value) {
+        SaveQuizRecordInLocalDatabase(
+            numOfQuestions,
+            numOfCorrectAns,
+            numOfWrongAns,
+            state,
+            scorePercentage, onInserted = {isInserted.value = true}
+        )
+    }
+
+//    for (i in state.quizState) {
+//        Log.d("@@score_state", "ScoreScreen: $i")
+//    }
     BackHandler {
         goToHome(navController)
     }
@@ -103,8 +129,13 @@ fun ScoreScreen(
                 withStyle(style = SpanStyle(color = Color.Black)) {
                     append(" are correct")
                 }
+                withStyle(style = SpanStyle(color = Color.Red)) {
+                    append(" $numOfWrongAns answers")
+                }
+                withStyle(style = SpanStyle(color = Color.Black)) {
+                    append(" are wrong.")
+                }
             }
-            val scorePercentage = calculatePercentage(numOfCorrectAns, numOfQuestions)
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -181,6 +212,35 @@ fun ScoreScreen(
     }
 }
 
+@Composable
+fun SaveQuizRecordInLocalDatabase(
+    numOfQuestions: Int,
+    numOfCorrectAns: Int,
+    numOfWrongAns: Int,
+    state: StateQuizScreen,
+    scorePercentage: Double,
+    onInserted :()->Unit
+) {
+    val quizRoomViewModel: QuizRoomViewModel = hiltViewModel()
+//    val quizRoomViewModel: QuizRoomViewModel = viewModel()
+//
+//    val quizzes by quizRoomViewModel..observeAsState(initial = emptyList())
+
+    LaunchedEffect(key1 = Unit) {
+
+        val quizEntity = QuizEntity(
+            numOfQuestion = numOfQuestions,
+            numOfRightAnswer = numOfCorrectAns,
+            numOfWrongAnswer = numOfWrongAns,
+            state = state,
+            scorePercentage = scorePercentage,
+            unattemptedQuestion = numOfQuestions - (numOfCorrectAns + numOfWrongAns)
+        )
+        quizRoomViewModel.insertQuizRecord(quizEntity)
+        onInserted()
+    }
+}
+
 fun calculatePercentage(numOfCorrectAns: Int, numOfQuestions: Int): Double {
     require(numOfCorrectAns >= 0 && numOfQuestions > 0) {
         "Invalid input: numOfCorrectAns must be non-negative and numOfQuestions must be positive"
@@ -195,6 +255,8 @@ fun ScoreScreenPreview() {
     ScoreScreen(
         numOfQuestions = 11,
         numOfCorrectAns = 6,
+        numOfWrongAns = 4,
+        state = StateQuizScreen(),
         navController = NavController(LocalContext.current)
     )
 }

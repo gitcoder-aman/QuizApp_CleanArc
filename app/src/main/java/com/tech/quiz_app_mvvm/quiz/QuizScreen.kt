@@ -45,6 +45,7 @@ import com.tech.quiz_app_mvvm.presentation.common.ButtonBox
 import com.tech.quiz_app_mvvm.presentation.common.QuizAppBar
 import com.tech.quiz_app_mvvm.presentation.nav_graph.Routes
 import com.tech.quiz_app_mvvm.presentation.nav_graph.goToHome
+import com.tech.quiz_app_mvvm.quiz.component.ErrorComposableScreen
 import com.tech.quiz_app_mvvm.quiz.component.QuizInterface
 import com.tech.quiz_app_mvvm.quiz.component.ShimmerEffectBooleanQuiz
 import com.tech.quiz_app_mvvm.quiz.component.ShimmerEffectMultipleQuiz
@@ -204,12 +205,13 @@ fun QuizScreen(
 
                             Log.d(
                                 "@@score",
-                                "QuizScreen: ${state.score}"
+                                "QuizScreen: ${state.rightAnswer}"
                             )
                             navController.navigate(
                                 Routes.ScoreScreen.passNumOfQuestionsAndCorrectAns(
                                     numOfQuestion = state.quizState.size,
-                                    numOfCorrectAns = state.score
+                                    numOfCorrectAns = state.rightAnswer,
+                                    numOfWrongAns = state.wrongAnswer
                                 )
                             )
                         }
@@ -244,36 +246,6 @@ fun quizFetched(state: StateQuizScreen, quizType: String): Boolean {
         else -> {
             ErrorComposableScreen(state.error)
             false
-        }
-    }
-}
-
-@Composable
-fun ErrorComposableScreen(error: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.wrapContentHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.no_data_found))
-
-            LottieAnimation(
-                composition = composition,
-                modifier = Modifier.size(Dimens.NoDataFoundLottieAnimationSize),
-                iterations = 100
-            )
-            Spacer(modifier = Modifier.height(Dimens.SmallSpacerHeight))
-
-            Text(text = error, style = TextStyle(
-                color = colorResource(id = R.color.white),
-                fontSize = Dimens.SmallTextSize,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            ))
         }
     }
 }

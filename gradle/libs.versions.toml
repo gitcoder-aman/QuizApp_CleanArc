@@ -3,6 +3,7 @@ accompanistSystemuicontroller = "0.31.4-beta"
 agp = "8.3.2"
 converterGson = "2.9.0"
 coreSplashscreen = "1.0.1"
+gson = "2.10.1"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -16,15 +17,19 @@ hiltAndroidCompiler = "2.49"
 hiltAndroid = "2.49"
 hiltNavigationCompose = "1.2.0"
 lottieCompose = "6.0.0"
+material3Version = "1.2.1"
 navigationCompose = "2.7.7"
 retrofit = "2.9.0"
 roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
+runtimeLivedata = "1.6.8"
 
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3Version" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -37,7 +42,6 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 #dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 #dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
@@ -58,6 +62,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 
 

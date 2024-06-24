@@ -56,6 +56,7 @@ import com.tech.quiz_app_mvvm.presentation.common.ButtonBox
 import com.tech.quiz_app_mvvm.presentation.home.component.DividerComponent
 import com.tech.quiz_app_mvvm.presentation.home.component.IconButtonComponent
 import com.tech.quiz_app_mvvm.presentation.nav_graph.Routes
+import com.tech.quiz_app_mvvm.presentation.score.ScoreDetailScreen
 import com.tech.quiz_app_mvvm.utils.Constants
 import com.tech.quiz_app_mvvm.utils.Dimens
 import kotlinx.coroutines.launch
@@ -82,11 +83,16 @@ fun HomeScreen(
                 drawerContainerColor = colorResource(id = R.color.dark_slate_blue),
                 drawerContentColor = colorResource(id = R.color.white)
             ) {
-                DrawerContent {
-                    scope.launch {
-                        drawerState.close()
+                DrawerContent(
+                    onCloseDrawer = {
+                        scope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    onContentClick = {
+                        navController.navigate(Routes.ScoreDetailScreen.route)
                     }
-                }
+                )
             }
         }
 
@@ -214,7 +220,8 @@ fun HomeHeader(
 
 @Composable
 fun DrawerContent(
-    onCloseDrawer: () -> Unit
+    onCloseDrawer: () -> Unit,
+    onContentClick:()->Unit
 ) {
     val context = LocalContext.current
     Box(
@@ -261,8 +268,7 @@ fun DrawerContent(
             DividerComponent()
 
             IconButtonComponent(icon = R.drawable.score_meter, iconName = "Your Score") {
-                onCloseDrawer()
-                Toast.makeText(context, "Implement on Future", Toast.LENGTH_SHORT).show()
+                onContentClick()
             }
 
             DividerComponent()

@@ -39,7 +39,7 @@ fun IconButtonComponent(
         Icon(
             painter = painterResource(id = icon),
             contentDescription = iconName,
-            modifier = Modifier.size(45.dp),
+            modifier = Modifier.size(35.dp),
             tint = colorResource(id = R.color.blue_grey)
         )
         Spacer(modifier = Modifier.width(Dimens.SmallSpacerWidth))
@@ -48,7 +48,7 @@ fun IconButtonComponent(
             color = colorResource(id = R.color.blue_grey),
             style = MaterialTheme.typography.titleSmall,
             textAlign = TextAlign.Center,
-            fontSize = Dimens.MediumTextSize
+            fontSize = Dimens.SmallTextSize
         )
     }
 }
