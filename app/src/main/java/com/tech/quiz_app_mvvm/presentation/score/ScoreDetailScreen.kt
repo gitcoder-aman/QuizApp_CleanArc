@@ -1,5 +1,6 @@
 package com.tech.quiz_app_mvvm.presentation.score
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,7 +33,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tech.quiz_app_mvvm.R
+import com.tech.quiz_app_mvvm.domain.model.Quiz
+import com.tech.quiz_app_mvvm.presentation.nav_graph.Routes
 import com.tech.quiz_app_mvvm.presentation.score.component.ScoreInterface
+import com.tech.quiz_app_mvvm.quiz.QuizScreen
+import com.tech.quiz_app_mvvm.quiz.QuizState
 import com.tech.quiz_app_mvvm.quiz.component.ErrorComposableScreen
 import com.tech.quiz_app_mvvm.quiz.component.noRippleClickable
 import com.tech.quiz_app_mvvm.room_db.presentation.QuizSaveRecordState
@@ -43,6 +48,10 @@ import com.tech.quiz_app_mvvm.ui.theme.OrangeColor
 import com.tech.quiz_app_mvvm.ui.theme.SkyColor
 import com.tech.quiz_app_mvvm.ui.theme.VioletColor
 import com.tech.quiz_app_mvvm.utils.Dimens
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun ScoreDetailScreen(
@@ -92,12 +101,12 @@ fun ScoreDetailScreen(
             )
         }
 
-        ScoreDetailContent(recordState)
+        ScoreDetailContent(recordState, navController)
     }
 }
 
 @Composable
-fun ScoreDetailContent(recordState: QuizSaveRecordState) {
+fun ScoreDetailContent(recordState: QuizSaveRecordState, navController: NavController) {
 
     Box(
         modifier = Modifier
@@ -128,7 +137,7 @@ fun ScoreDetailContent(recordState: QuizSaveRecordState) {
 
                 is QuizSaveRecordState.Success -> {
                     val listQuizRecords = (recordState as QuizSaveRecordState.Success).data
-                    if(listQuizRecords.isNotEmpty()) {
+                    if (listQuizRecords.isNotEmpty()) {
                         LazyColumn {
                             items(listQuizRecords) { quizRecord ->
 
@@ -149,11 +158,45 @@ fun ScoreDetailContent(recordState: QuizSaveRecordState) {
                                     nonAttemptedQuestion = quizRecord.unattemptedQuestion.toString(),
                                     timeDuration = "30s",
                                     backgroundColor = listOfLightColor,
-                                    iconColor = listOfColor[listOfLightColor]!!
+                                    iconColor = listOfColor[listOfLightColor]!!,
+                                    onClickScoreCard = {
+
+                                        val quizRecordStateString =  URLEncoder.encode(Json.encodeToString(quizRecord.state),StandardCharsets.UTF_8.toString())
+                                        Log.d("@@quizStateResponse", "ScoreDetailContent: $quizRecordStateString")
+
+                                        navController.navigate(
+                                            route = Routes.AnsShowScreen.passQuizStateResponse(
+                                                quizStateResponse = quizRecordStateString
+                                            )
+                                        )
+                                        for (i in quizRecord.state.quizState.indices) {
+                                            Log.d(
+                                                "@@your_score",
+                                                "ScoreDetailContent:Question-> ${quizRecord.state.quizState[i].quiz?.question}"
+                                            )
+                                            Log.d(
+                                                "@@your_score",
+                                                "ScoreDetailContent:Shuffle Options-> ${quizRecord.state.quizState[i].shuffleOptions}"
+                                            )
+                                            Log.d(
+                                                "@@your_score",
+                                                "ScoreDetailContent: correct ans-> ${quizRecord.state.quizState[i].quiz?.correct_answer}"
+                                            )
+                                            Log.d(
+                                                "@@your_score",
+                                                "ScoreDetailContent: Incorrect ans-> ${quizRecord.state.quizState[i].quiz?.incorrect_answers}"
+                                            )
+                                            Log.d(
+                                                "@@your_score",
+                                                "ScoreDetailContent: Selected Options-> ${quizRecord.state.quizState[i].selectedOptions}"
+                                            )
+
+                                        }
+                                    }
                                 )
                             }
                         }
-                    }else{
+                    } else {
                         ErrorComposableScreen(error = stringResource(R.string.please_play_the_quiz))
                     }
                 }

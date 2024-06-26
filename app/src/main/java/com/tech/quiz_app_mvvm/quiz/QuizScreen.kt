@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,26 +24,16 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.tech.quiz_app_mvvm.R
 import com.tech.quiz_app_mvvm.presentation.common.ButtonBox
 import com.tech.quiz_app_mvvm.presentation.common.QuizAppBar
 import com.tech.quiz_app_mvvm.presentation.nav_graph.Routes
-import com.tech.quiz_app_mvvm.presentation.nav_graph.goToHome
 import com.tech.quiz_app_mvvm.quiz.component.ErrorComposableScreen
 import com.tech.quiz_app_mvvm.quiz.component.QuizInterface
 import com.tech.quiz_app_mvvm.quiz.component.ShimmerEffectBooleanQuiz
@@ -63,6 +51,7 @@ fun QuizScreen(
     quizType: String,
     event: (EventQuizScreen) -> Unit,
     state: StateQuizScreen,
+    isAnsShow: Boolean,
     navController: NavController
 ) {
     Column(
@@ -137,7 +126,8 @@ fun QuizScreen(
                             event(EventQuizScreen.SetOptionSelected(index, selectedIndex))
                         },
                         quizState = state.quizState[index],
-                        qNumber = index + 1
+                        qNumber = index + 1,
+                        isAnsShow = isAnsShow
                     )
                 }
 
@@ -149,7 +139,7 @@ fun QuizScreen(
                             }
 
                             state.quizState.size - 1 -> {
-                                listOf("Previous", "Submit")
+                                listOf("Previous", if (!isAnsShow) "Submit" else "Check Score")
                             }
 
                             else -> {
@@ -174,6 +164,7 @@ fun QuizScreen(
                             padding = Dimens.SmallPadding,
                             fraction = 0.43f,
                             fontSize = Dimens.SmallTextSize,
+                            borderColor = colorResource(id = R.color.mid_night_blue),
                         ) {
                             scope.launch {
                                 pagerState.animateScrollToPage(pagerState.currentPage - 1)
@@ -185,7 +176,6 @@ fun QuizScreen(
                             fraction = 0.43f,
                             fontSize = Dimens.SmallTextSize,
                             containerColor = colorResource(id = R.color.mid_night_blue),
-                            borderColor = colorResource(id = R.color.mid_night_blue)
                         ) {
                             //Nothing
                         }
@@ -193,32 +183,30 @@ fun QuizScreen(
 
                     ButtonBox(
                         text = buttonText[1],
-                        containerColor = if (buttonText[1] == "Submit") colorResource(id = R.color.orange) else colorResource(
+                        containerColor = if (buttonText[1] == "Next") colorResource(
                             id = R.color.dark_slate_blue
-                        ),
+                        ) else colorResource(id = R.color.orange),
                         padding = Dimens.SmallPadding,
                         fraction = 1f,
                         fontSize = Dimens.SmallTextSize,
-                        textColor = colorResource(id = R.color.white),
+                        textColor = colorResource(id = R.color.blue_grey),
+                        borderColor = colorResource(id = R.color.blue_grey),
                     ) {
                         if (pagerState.currentPage == state.quizState.size - 1) {
                             //TODO
-
-                            Log.d(
-                                "@@score",
-                                "QuizScreen: ${state.rightAnswer}"
-                            )
-
                             navController.navigate(
                                 Routes.ScoreScreen.passNumOfQuestionsAndCorrectAns(
                                     numOfQuestion = state.quizState.size,
                                     numOfCorrectAns = state.rightAnswer,
-                                    numOfWrongAns = state.wrongAnswer
+                                    numOfWrongAns = state.wrongAnswer,
+                                    isAnsShow = isAnsShow
                                 )
                             )
-                        }
-                        scope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+
+                        }else {
+                            scope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
                         }
                     }
                 }
@@ -262,6 +250,7 @@ fun QuizScreenPreview() {
         quizType = "Easy",
         event = {},
         state = StateQuizScreen(),
+        isAnsShow = false,
         navController = NavController(
             LocalContext.current
         )

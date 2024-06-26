@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import com.tech.quiz_app_mvvm.R
+import com.tech.quiz_app_mvvm.quiz.component.noRippleClickable
 import com.tech.quiz_app_mvvm.utils.Dimens
 
 @Composable
@@ -28,7 +29,7 @@ fun ButtonBox(
     modifier : Modifier = Modifier,
     text: String,
     padding: Dp = Dimens.SmallPadding,
-    borderColor : Color = colorResource(id = R.color.blue_grey),
+    borderColor : Color = colorResource(id = R.color.mid_night_blue),
     containerColor : Color = colorResource(id = R.color.blue_grey),
     textColor : Color = colorResource(id = R.color.black),
     fontSize : TextUnit = Dimens.MediumTextSize,
@@ -43,11 +44,11 @@ fun ButtonBox(
                 borderColor,
                 RoundedCornerShape(Dimens.LargeCornerRadius)
             )
-            .clickable { onButtonClick() }
             .fillMaxWidth(fraction)
             .height(Dimens.MediumBoxHeight)
             .clip(RoundedCornerShape(Dimens.LargeCornerRadius))
-            .background(containerColor),
+            .background(containerColor)
+            .noRippleClickable { onButtonClick() },
         contentAlignment = Alignment.Center
     ) {
 

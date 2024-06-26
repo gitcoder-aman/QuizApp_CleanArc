@@ -52,9 +52,10 @@ fun ScoreInterface(
     timeDuration: String = "30s",
     backgroundColor: Color = LightOrangeColor,
     iconColor: Color = OrangeColor,
+    onClickScoreCard:()->Unit = {}
 ) {
     Card(
-        onClick = { /*TODO*/ },
+        onClick = { onClickScoreCard() },
         modifier = Modifier.padding(5.dp),
         colors = CardDefaults.elevatedCardColors(
             containerColor = backgroundColor,

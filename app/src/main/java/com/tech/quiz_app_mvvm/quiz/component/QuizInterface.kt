@@ -25,8 +25,10 @@ fun QuizInterface(
     onOptionSelected: (Int) -> Unit,
     qNumber: Int,
     quizState: QuizState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isAnsShow : Boolean
 ) {
+
     val question = quizState.quiz?.question!!.replace("&quot", "\"").replace("&#039;", "\"")
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(
@@ -43,7 +45,7 @@ fun QuizInterface(
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = question,
+                    text = question.replace("+"," "),
                     color = colorResource(id = R.color.blue_grey),
                     modifier = Modifier.weight(9f),
                     fontSize = Dimens.SmallTextSize,
@@ -83,6 +85,8 @@ fun QuizInterface(
                                 optionNumber = optionNumber,
                                 options = optionText,
                                 selected = quizState.selectedOptions == index,
+                                isAnsShow = isAnsShow,
+                                quizState = quizState,
                                 onOptionClick = { onOptionSelected(index) },
                                 onUnselectOption = { onOptionSelected(-1) }
                             )
@@ -100,5 +104,5 @@ fun QuizInterface(
 @Preview
 @Composable
 fun QuizInterfacePreview() {
-    QuizInterface(onOptionSelected = {}, quizState = QuizState(), qNumber = 1)
+    QuizInterface(onOptionSelected = {}, quizState = QuizState(), qNumber = 1, isAnsShow = false)
 }

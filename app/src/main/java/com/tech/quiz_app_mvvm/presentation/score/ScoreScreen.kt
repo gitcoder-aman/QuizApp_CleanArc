@@ -1,5 +1,6 @@
 package com.tech.quiz_app_mvvm.presentation.score
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,22 +59,26 @@ fun ScoreScreen(
     numOfCorrectAns: Int,
     numOfWrongAns: Int,
     state: StateQuizScreen,
-    navController: NavController
+    navController: NavController,
+    isAnsShow: Boolean?
 ) {
 
+    Log.d("@@isAnsShow", "ScoreScreen: $isAnsShow")
     val scorePercentage = calculatePercentage(numOfCorrectAns, numOfQuestions)
 
     // State variable to control database insertion
     val isInserted = remember { mutableStateOf(false) }
 
-    if(!isInserted.value) {
-        SaveQuizRecordInLocalDatabase(
-            numOfQuestions,
-            numOfCorrectAns,
-            numOfWrongAns,
-            state,
-            scorePercentage, onInserted = {isInserted.value = true}
-        )
+    if (!isInserted.value) {
+        if (isAnsShow == true) {
+            SaveQuizRecordInLocalDatabase(
+                numOfQuestions,
+                numOfCorrectAns,
+                numOfWrongAns,
+                state,
+                scorePercentage, onInserted = { isInserted.value = true }
+            )
+        }
     }
 
 //    for (i in state.quizState) {
@@ -219,7 +224,7 @@ fun SaveQuizRecordInLocalDatabase(
     numOfWrongAns: Int,
     state: StateQuizScreen,
     scorePercentage: Double,
-    onInserted :()->Unit
+    onInserted: () -> Unit
 ) {
     val quizRoomViewModel: QuizRoomViewModel = hiltViewModel()
 
@@ -254,6 +259,7 @@ fun ScoreScreenPreview() {
         numOfCorrectAns = 6,
         numOfWrongAns = 4,
         state = StateQuizScreen(),
-        navController = NavController(LocalContext.current)
+        navController = NavController(LocalContext.current),
+        isAnsShow = false
     )
 }
