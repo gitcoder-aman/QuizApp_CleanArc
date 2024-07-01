@@ -1,5 +1,6 @@
 package com.tech.quiz_app_mvvm.room_db.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,7 @@ class QuizRoomViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val quizRecords = quizRepository.getAllQuizRecords()
+                Log.d("@@quizViewmodel", "fetchAllQuizRecords: ${quizRecords.size}")
                 _allQuizRecords.value = QuizSaveRecordState.Success(quizRecords)
             } catch (e: Exception) {
                 _allQuizRecords.value = QuizSaveRecordState.Error(e.message ?: "Insert Error")

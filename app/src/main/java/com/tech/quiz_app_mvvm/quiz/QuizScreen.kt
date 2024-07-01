@@ -193,6 +193,8 @@ fun QuizScreen(
                         borderColor = colorResource(id = R.color.blue_grey),
                     ) {
                         if (pagerState.currentPage == state.quizState.size - 1) {
+                            Log.d("@@isAnsShow", "QuizScreen: $isAnsShow")
+
                             //TODO
                             navController.navigate(
                                 Routes.ScoreScreen.passNumOfQuestionsAndCorrectAns(

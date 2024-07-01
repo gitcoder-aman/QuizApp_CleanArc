@@ -70,7 +70,7 @@ fun ScoreScreen(
     val isInserted = remember { mutableStateOf(false) }
 
     if (!isInserted.value) {
-        if (isAnsShow == true) {
+        if (isAnsShow == false) {
             SaveQuizRecordInLocalDatabase(
                 numOfQuestions,
                 numOfCorrectAns,

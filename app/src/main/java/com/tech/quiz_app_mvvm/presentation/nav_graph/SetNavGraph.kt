@@ -45,6 +45,9 @@ fun SetNavGraph() {
             val quizRoomViewModel: QuizRoomViewModel = hiltViewModel()
             val recordState by quizRoomViewModel.allQuizRecords.observeAsState(QuizSaveRecordState.Loading)
 
+            Log.d("@@quizViewmodel", "SetNavGraph: $recordState")
+
+
             ScoreDetailScreen(navController, recordState)
         }
         composable(
@@ -77,13 +80,17 @@ fun SetNavGraph() {
                 navArgument(NOQ_KEY) { type = NavType.IntType },
                 navArgument(CORRECT_ANS_KEY) { type = NavType.IntType },
                 navArgument(WRONG_ANS_KEY) { type = NavType.IntType },
-                navArgument(IS_ANS_SHOW){type = NavType.StringType}
+                navArgument(IS_ANS_SHOW){type = NavType.BoolType}
             )
         ) {
             val numOfQuestions = it.arguments?.getInt(NOQ_KEY)
             val numOfCorrectAns = it.arguments?.getInt(CORRECT_ANS_KEY)
             val numOfWrongAns = it.arguments?.getInt(WRONG_ANS_KEY)
             val isAnsShow = it.arguments?.getBoolean(IS_ANS_SHOW)
+
+
+            Log.d("@@isAnsShow", "SetNavGraph: $isAnsShow")
+
             ScoreScreen(
                 numOfQuestions = numOfQuestions!!,
                 numOfCorrectAns = numOfCorrectAns!!,

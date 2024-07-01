@@ -56,6 +56,8 @@ sealed class Routes(val route: String) {
             numOfWrongAns: Int,
             isAnsShow: Boolean
         ): String {
+            Log.d("@@isAnsShow", "Routes: $isAnsShow")
+
             return "score_screen/{$NOQ_KEY}/{$CORRECT_ANS_KEY}/{$WRONG_ANS_KEY}/{$IS_ANS_SHOW}"
                 .replace("{$NOQ_KEY}", numOfQuestion.toString())
                 .replace("{$CORRECT_ANS_KEY}", numOfCorrectAns.toString())

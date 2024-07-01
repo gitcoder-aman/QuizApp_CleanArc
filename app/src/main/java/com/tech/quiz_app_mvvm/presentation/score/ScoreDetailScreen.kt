@@ -59,6 +59,8 @@ fun ScoreDetailScreen(
     recordState: QuizSaveRecordState
 ) {
 
+    Log.d("@@quizViewmodel", "ScoreDetailScreen: $recordState")
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -136,6 +138,9 @@ fun ScoreDetailContent(recordState: QuizSaveRecordState, navController: NavContr
                 }
 
                 is QuizSaveRecordState.Success -> {
+
+                    Log.d("@@quizViewmodel", "ScoreDetailScreen: ${recordState.data}")
+
                     val listQuizRecords = (recordState as QuizSaveRecordState.Success).data
                     if (listQuizRecords.isNotEmpty()) {
                         LazyColumn {
