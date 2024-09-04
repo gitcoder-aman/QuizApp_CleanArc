@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.tech.quiz_app_mvvm.presentation.PrivacyScreen
 import com.tech.quiz_app_mvvm.presentation.home.HomeScreen
 import com.tech.quiz_app_mvvm.quiz.QuizScreen
 import com.tech.quiz_app_mvvm.presentation.home.HomeScreenViewModel
@@ -118,6 +119,9 @@ fun SetNavGraph() {
                 isAnsShow = true,
                 navController = navController
             )
+        }
+        composable(Routes.PrivacyScreen.route){
+            PrivacyScreen()
         }
     }
 }

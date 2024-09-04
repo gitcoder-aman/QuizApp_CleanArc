@@ -15,6 +15,7 @@ const val IS_ANS_SHOW = "is_ans_show"
 sealed class Routes(val route: String) {
     object HomeScreen : Routes(route = "home_screen")
     object ScoreDetailScreen : Routes(route = "score_details_screen")
+    object PrivacyScreen : Routes(route = "privacy_screen")
     object QuizScreen :
         Routes(route = "quiz_screen/{$ARG_KEY_QUIZ_NUMBER}/{$ARG_KEY_QUIZ_CATEGORY}/{$ARG_KEY_QUIZ_DIFFICULTY}/{$ARG_KEY_QUIZ_TYPE}") {
 

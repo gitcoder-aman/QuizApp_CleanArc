@@ -89,6 +89,9 @@ fun HomeScreen(
                             drawerState.close()
                         }
                     },
+                    onPrivacyClick = {
+                                     navController.navigate(Routes.PrivacyScreen.route)
+                    },
                     onContentClick = {
                         navController.navigate(Routes.ScoreDetailScreen.route)
                     }
@@ -221,6 +224,7 @@ fun HomeHeader(
 @Composable
 fun DrawerContent(
     onCloseDrawer: () -> Unit,
+    onPrivacyClick : ()->Unit,
     onContentClick:()->Unit
 ) {
     val context = LocalContext.current
@@ -275,6 +279,7 @@ fun DrawerContent(
 
             IconButtonComponent(icon = R.drawable.privacy_policy, iconName = "Privacy") {
                 onCloseDrawer()
+                onPrivacyClick()
             }
             DividerComponent()
 
